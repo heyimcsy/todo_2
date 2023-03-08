@@ -1,8 +1,25 @@
+// 액션 타입
 const ADD_TODO = 'ADD_TODO'
+const DELETE_TODO = 'DELETE_TODO'
+const DONE_TODO = 'DONE_TODO'
+const USER_ID = 'USER_ID'
 
+// 액션 크리에이터
 export const addTodo = (payload) => {
   return { type: ADD_TODO, payload }
 }
+
+export const deleteTodo = (payload) => {
+  return { type: DELETE_TODO, payload }
+}
+
+export const doneTodo = (payload) => {
+  return { type: DONE_TODO, payload }
+}
+export const userId = (payload) => {
+  return { type: USER_ID, payload }
+}
+
 const initialState = {
   todos: [
     {
@@ -27,6 +44,26 @@ const todosReducer = (state = initialState, action) => {
       return {
         ...state,
         todos: state.todos.concat(action.payload),
+      }
+
+    case DELETE_TODO:
+      return {
+        ...state,
+        todos: state.todos.filter((todo) => todo.id !== action.payload.id),
+      }
+    case DONE_TODO:
+      return {
+        ...state,
+        todos: state.todos.map((todo) => {
+          if (todo.id === action.payload) {
+            return {
+              ...todo,
+              isDone: !todo.isDone,
+            }
+          } else {
+            return todo
+          }
+        }),
       }
 
     default:

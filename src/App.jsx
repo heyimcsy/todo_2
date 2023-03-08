@@ -1,13 +1,16 @@
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { addTodo } from './redux/modules/todos'
+import { addTodo, deleteTodo, doneTodo } from './redux/modules/todos'
 
 const App = () => {
   const dispatch = useDispatch()
   const todos = useSelector(({ todos }) => todos.todos)
 
+  const array = new Uint32Array(1)
+  window.crypto.getRandomValues(array)
+
   const [todo, setTodo] = useState({
-    id: new Date(),
+    id: '',
     title: '',
     body: '',
     isDone: false,
@@ -33,6 +36,7 @@ const App = () => {
           onChange={({ target: { value: title } }) => {
             setTodo((pre) => ({
               ...pre,
+              id: array[0],
               title,
             }))
             console.log(title)
@@ -45,6 +49,7 @@ const App = () => {
           onChange={({ target: { value: body } }) => {
             setTodo((pre) => ({
               ...pre,
+              id: array[0],
               body,
             }))
             console.log(body)
@@ -58,14 +63,70 @@ const App = () => {
           추가하기
         </button>
         <br />
-        <div>
+        <div
+          style={{
+            backgroundColor: 'yellow',
+          }}
+        >
           <h1>Todos !</h1>
-          {todos.map((todo) => (
-            <div key={todo.id}>
-              <div> {todo.title}</div>
-              <div> {todo.body}</div>
-            </div>
-          ))}
+          <div
+            style={{
+              backgroundColor: 'green',
+              display: 'flex',
+            }}
+          >
+            {todos
+              .filter((todo) => !todo.isDone)
+              .map((todo) => (
+                <div
+                  style={{
+                    backgroundColor: 'orange',
+                    width: '200px',
+                    height: '200px',
+                    borderRadius: '20px',
+                  }}
+                  key={todo.id}
+                >
+                  <label>상세보기</label>
+                  <div>{todo.title}</div>
+                  <div>{todo.body}</div>
+                  <button onClick={() => dispatch(deleteTodo(todo))}>삭제하기</button>
+                  <button onClick={() => dispatch(doneTodo(todo.id))}>{todo.isDone ? '취소!' : '완료!'}</button>
+                </div>
+              ))}
+          </div>
+        </div>
+        <div
+          style={{
+            backgroundColor: 'yellow',
+          }}
+        >
+          <h1> Done! </h1>
+          <div
+            style={{
+              backgroundColor: 'green',
+              display: 'flex',
+            }}
+          >
+            {todos
+              .filter((todo) => todo.isDone)
+              .map((todo) => (
+                <div
+                  style={{
+                    backgroundColor: 'orange',
+                    width: '200px',
+                    height: '200px',
+                    borderRadius: '20px',
+                  }}
+                  key={todo.id}
+                >
+                  <div>{todo.title}</div>
+                  <div>{todo.body}</div>
+                  <button onClick={() => dispatch(deleteTodo(todo))}>삭제하기</button>
+                  <button onClick={() => dispatch(doneTodo(todo.id))}>{todo.isDone ? '취소!' : '완료!'}</button>
+                </div>
+              ))}
+          </div>
         </div>
       </div>
     </>
