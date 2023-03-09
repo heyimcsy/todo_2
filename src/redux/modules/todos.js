@@ -65,6 +65,13 @@ const todosReducer = (state = initialState, action) => {
           }
         }),
       }
+    case USER_ID:
+      return {
+        ...state,
+        todo: state.todos.find((todo) => {
+          return todo.id === action.payload
+        }),
+      }
 
     default:
       return state
