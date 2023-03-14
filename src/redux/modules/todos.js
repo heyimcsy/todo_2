@@ -35,6 +35,12 @@ const initialState = {
       isDone: false,
     },
   ],
+  todo: {
+    id: '0',
+    title: '',
+    body: '',
+    isDone: false,
+  },
 }
 
 const todosReducer = (state = initialState, action) => {
@@ -72,7 +78,6 @@ const todosReducer = (state = initialState, action) => {
           return todo.id === action.payload
         }),
       }
-
     default:
       return state
   }

@@ -16,7 +16,7 @@ import todos from '../modules/todos'
 combineReducers은 여러 개의 독립적인 reducer의 반환 값을 하나의 상태 객체로 만들어줍니다.
 */
 const rootReducer = combineReducers({
-  todos: todos,
+  todos,
 })
 const store = createStore(rootReducer)
 
